@@ -11,7 +11,7 @@ struct InsertionInfo {
 
 typedef struct Solucao {
     vector<int> sequence;
-    double valorObj;
+    double cost;
 } Solution;
 
 vector<int> escolher3NosAleatorios(int n_vertices){
@@ -52,9 +52,6 @@ vector<InsertionInfo> calcularCustoInsercao(Solution& s, vector<int>& CL, vector
             l++;
         }
     }
-    /*for (int i=0; i < custoInsercao.size(); i++){
-            printf("CUSTO: %f    /    NO INSERIDO: %d    /   ARESTA REMOVIDA: %d\n", custoInsercao[i].custo, custoInsercao[i].noInserido, custoInsercao[i].arestaRemovida);
-    }*/
     return custoInsercao;
 }
 
@@ -67,14 +64,16 @@ void ordenarEmOrdemCrescente(vector <InsertionInfo>& custoInsercao){
 }
 
 void inserirNaSolucao(Solution& s, int noInserido, int arestaRemovida) {
-    s.sequence.insert(s.sequence.begin() + arestaRemovida, noInserido);
+    s.sequence.insert(s.sequence.begin() + arestaRemovida + 1, noInserido);
 }
+
 
 
 
 Solution Construcao(int n_vertices, vector<vector<int>>& c){
     Solution s;
 
+    s.cost = 0;
     s.sequence = escolher3NosAleatorios(n_vertices);
 
     vector<int> CL = nosRestantes(n_vertices, s.sequence);
@@ -82,12 +81,154 @@ Solution Construcao(int n_vertices, vector<vector<int>>& c){
     while(!CL.empty()) {
         vector<InsertionInfo> custoInsercao = calcularCustoInsercao(s, CL, c);
         ordenarEmOrdemCrescente(custoInsercao);
+
+        for (int i = 0; i < custoInsercao.size(); i++) {
+    }
+
         double alpha = (double) rand() / RAND_MAX;
         int selecionado = rand() % ((int) ceil(alpha * custoInsercao.size()));
         inserirNaSolucao(s, custoInsercao[selecionado].noInserido, custoInsercao[selecionado].arestaRemovida);
         CL.erase(remove(CL.begin(), CL.end(), custoInsercao[selecionado].noInserido), CL.end());
     }
     return s;
+}
+
+
+bool bestImprovementSwap(Solution *s, vector<vector<int>>& c) {
+
+    double bestDelta = 0;
+    int best_i, best_j;
+
+    for (int i = 1; i < s->sequence.size() - 1; i++) {
+        int vi = s->sequence[i] - 1;
+        int vi_next = s->sequence[i + 1] - 1;
+        int vi_prev = s->sequence[i - 1] - 1;
+
+        for (int j = i + 1; j < s->sequence.size()-1; j++) {
+            int vj = s->sequence[j] - 1;
+            int vj_next = s->sequence[j + 1] - 1;
+            int vj_prev = s->sequence[j - 1] - 1;
+            double delta;
+
+            if (j == i+1){
+                delta = -c[vi_prev][vi] - c[vi][vi_next] + c[vi_prev][vj] + c[vj][vi_next] + c[vj_prev][vj] - c[vj][vj_next]
+                            + c[vj_prev][vi] + c[vi][vj_next];
+            } else{
+                delta = -c[vi_prev][vi] - c[vi][vi_next] + c[vi_prev][vj] + c[vj][vi_next] - c[vj_prev][vj] - c[vj][vj_next]
+                            + c[vj_prev][vi] + c[vi][vj_next];
+            }
+
+            if (delta < bestDelta) {
+                bestDelta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        }
+    }
+
+    if (bestDelta < 0) {
+        swap(s->sequence[best_i], s->sequence[best_j]);
+        s->cost += bestDelta;
+        return true;
+    }
+
+    return false;
+}
+
+
+
+bool bestImprovement2Opt(Solution *s, vector<vector<int>>& c){
+    double bestDelta = 0;
+    int best_i, best_j;
+    for (int i=1; i < s->sequence.size() - 2; i++){
+        int vi = s->sequence[i]-1;
+        int vi_prev = s->sequence[i-1]-1;
+        int vi_next = s->sequence[i+1]-1;
+
+        for (int j= i+2; j < s->sequence.size() - 2; j++){
+            int vj = s->sequence[j] - 1;
+            int vj_prev = s->sequence[j-1] - 1;
+            int vj_next = s->sequence[j+1] - 1;
+
+            double delta = -c[vi_prev][vi] -c[vj_prev][vj] + c[vi_prev][vj_prev] + c[vi][vj];
+
+            if (delta < bestDelta){
+                bestDelta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        }
+    }
+
+    if (bestDelta < 0){
+        reverse(s->sequence.begin() + best_i, s->sequence.begin() + best_j);
+        s->cost += bestDelta;
+        return true;
+    }
+
+    return false;
+}
+
+bool bestImprovementOrOpt(Solution *s, int k, vector<vector<int>>& c){
+    double bestDelta=0;
+    int best_i, best_j;
+    for (int i=1; i < s->sequence.size() - k; i++){
+        int vi = s->sequence[i] - 1;
+        int vi_next = s->sequence[i + 1] - 1;
+        int vi_prev = s->sequence[i - 1] - 1;
+        for (int j= i + k; j < s->sequence.size() - 1; j++){
+            int vj = s->sequence[j] - 1;
+            int vj_next = s->sequence[j + 1] - 1;
+            int vj_prev = s->sequence[j - 1] - 1;
+            double delta;
+
+            if (k==1){
+                delta = -c[vi_prev][vi] - c[vi][vi_next] + c[vi_prev][vi_next] - c[vj][vj_next] + c[vj][vi] + c[vi][vj_next];
+            } else if (k == 2){
+                int vm = s->sequence[i + 2] - 1;
+                delta = -c[vi_prev][vi] - c[vi_next][vm] - c[vj][vj_next] + c[vi_prev][vm] + c[vi][vj_next] + c[vi_next][vj];
+            } else if (k == 3){
+                int vm = s->sequence[i + 2] - 1;
+                int vm2 = s->sequence[i + 3] - 1;
+                delta = -c[vi_prev][vi] - c[vm][vm2] - c[vj][vj_next] + c[vi_prev][vm2] + c[vi][vj_next] + c[vm][vj];
+            }
+
+            if (delta < bestDelta){
+                bestDelta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        }
+    }
+
+    if (bestDelta < 0){
+        reverse(s->sequence.begin() + best_i, s->sequence.begin() + best_i + k);
+	    rotate(s->sequence.begin() + best_i, s->sequence.begin() + best_i + k, s->sequence.begin() + best_j + 1);
+        s->cost += bestDelta;
+        return true;  
+    }
+    return false;
+}
+
+void BuscaLocal(Solution *s,  vector<vector<int>>& c){
+    vector<int> NL = {1, 2, 3, 4, 5};
+    bool improved = false;
+    while (NL.empty() == false){
+        int n = rand() % NL.size();
+
+        switch (NL[n]){
+            case 1: improved = bestImprovementSwap(s, c); break;
+            case 2: improved = bestImprovement2Opt(s, c); break;
+            case 3: improved = bestImprovementOrOpt(s, 1, c); break;
+            case 4: improved = bestImprovementOrOpt(s, 2, c); break;
+            case 5: improved = bestImprovementOrOpt(s, 3, c); break;
+        }
+
+        if (improved)
+            NL = {1, 2, 3, 4, 5};
+        else
+            NL.erase(NL.begin() + n);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -100,17 +241,6 @@ int main(int argc, char** argv) {
     cout << "Dimension: " << n << endl;
     cout << "DistanceMatrix: " << endl;
     data.printMatrixDist();
-
-
-    cout << "Exemplo de Solucao s = ";
-    double cost = 0.0;
-    for (size_t i = 1; i < n; i++) {
-        cout << i << " -> ";
-        cost += data.getDistance(i, i+1);
-    }
-    cost += data.getDistance(n, 1);
-    cout << n << " -> " << 1 << endl;
-    cout << "Custo de S: " << cost << endl;
 
     vector<vector<int>> c(n, vector<int>(n, 0));
     for (int i=0; i < n; i++){
@@ -125,7 +255,14 @@ int main(int argc, char** argv) {
     for (int i = 0; i < solucao.sequence.size(); i++) {
         cout << solucao.sequence[i] << " -> ";
     }
-    cout << solucao.sequence[0] << endl;
+
+    BuscaLocal(&solucao, c);
+
+    printf("\nApos BuscaLocal(): \n\n");
+
+    for (int i = 0; i < solucao.sequence.size(); i++) {
+        cout << solucao.sequence[i] << " -> ";
+    }
 
     return 0;
 }
