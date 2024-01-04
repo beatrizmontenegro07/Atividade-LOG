@@ -90,6 +90,12 @@ Solution Construcao(int n_vertices, vector<vector<int>>& c){
         inserirNaSolucao(s, custoInsercao[selecionado].noInserido, custoInsercao[selecionado].arestaRemovida);
         CL.erase(remove(CL.begin(), CL.end(), custoInsercao[selecionado].noInserido), CL.end());
     }
+
+    for (int i = 0; i < s.sequence.size() - 1; i++){
+        int n1 = s.sequence[i] - 1;
+        int n2 = s.sequence[i+1] - 1;
+        s.cost += c[n1][n2];
+    }
     return s;
 }
 
@@ -231,6 +237,65 @@ void BuscaLocal(Solution *s,  vector<vector<int>>& c){
     }
 }
 
+Solution Perturbacao(Solution& best, vector<vector<int>>& c){
+    Solution s = best;
+    int maxSize = ceil(static_cast<double>(s.sequence.size()) / 10);
+    int size1 = 2 + rand() % (maxSize - 2 + 1); // escolhe um valor entre 2 e |V| / 10
+    int start1 = 1 + rand() % (s.sequence.size() - size1 - 1); // onde o primeiro segmento começa
+    int end1 = start1 + size1 - 1;
+    int size2 = 2 + rand() % (maxSize - 2 + 1); // escolhe um valor entre 2 e |V| / 10
+    int start2, end2;
+
+    do{
+        start2 = 1 + rand() % (s.sequence.size() - size2 - 1);
+        end2 = start2 + size2 - 1;
+    } while (start1 <= end2 && end1 >= start2); //verifica se os seguimentos se sobrepõem
+
+    auto begin = s.sequence.begin() + min(start1, start2);
+    auto end = s.sequence.begin() + max(end1, end2) + 1;
+
+    // realiza a troca dos segmentos
+    if (start1 < start2) {
+        rotate(begin, s.sequence.begin() + start2, s.sequence.begin() + end2 + 1);
+        rotate(begin + size2, begin + size2 + size1, s.sequence.begin() + end2 + 1);
+    } else {
+        rotate(begin, s.sequence.begin() + start1, s.sequence.begin() + end1 + 1);
+        rotate(begin + size1, begin + size1 + size2, s.sequence.begin() + end1 + 1);
+    }
+
+    for (int i = 0; i < s.sequence.size() - 1; i++){
+        int n1 = s.sequence[i] - 1;
+        int n2 = s.sequence[i+1] - 1;
+        s.cost += c[n1][n2];
+    }
+
+    return s;
+
+}
+
+Solution ILS(int maxIter, int maxIterIls,int n, vector<vector<int>>& c){
+    Solution bestOfAll;
+    bestOfAll.cost = INFINITY;
+    for(int i = 0; i < maxIter; i++){
+        Solution s = Construcao(n, c);
+        Solution best = s;
+        int iterIls = 0;
+
+        while(iterIls <= maxIterIls){
+            BuscaLocal(&s, c);
+            if(s.cost < best.cost){
+                best = s;
+                iterIls = 0;
+            }
+            s = Perturbacao(best, c);
+            iterIls++;
+        }
+        if (best.cost < bestOfAll.cost)
+            bestOfAll = best;
+    }
+    return bestOfAll;
+}
+
 int main(int argc, char** argv) {
     srand(time(NULL));
 
@@ -249,20 +314,22 @@ int main(int argc, char** argv) {
         }
     }
 
-    Solution solucao = Construcao(n, c);
+    int maxInter = 50, maxInterILS;
 
-    cout << "\nSolucao Construida: ";
-    for (int i = 0; i < solucao.sequence.size(); i++) {
-        cout << solucao.sequence[i] << " -> ";
+    if (n >= 150)
+        maxInterILS = n / 2;
+    else
+        maxInterILS = n;
+
+    Solution s = ILS(maxInter, maxInterILS, n, c);
+
+    cout << "Solucao final: " << endl;
+
+    for (int i=0; i < s.sequence.size(); i++){
+        cout << s.sequence[i] << "-> ";
     }
-
-    BuscaLocal(&solucao, c);
-
-    printf("\nApos BuscaLocal(): \n\n");
-
-    for (int i = 0; i < solucao.sequence.size(); i++) {
-        cout << solucao.sequence[i] << " -> ";
-    }
+    cout << endl;
+    cout << "Custo: " << s.cost;
 
     return 0;
 }
