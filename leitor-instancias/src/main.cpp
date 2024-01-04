@@ -297,6 +297,8 @@ Solution ILS(int maxIter, int maxIterIls,int n, vector<vector<int>>& c){
 }
 
 int main(int argc, char** argv) {
+    clock_t start, end;
+    start = clock();
     srand(time(NULL));
 
     auto data = Data(argc, argv[1]);
@@ -329,7 +331,12 @@ int main(int argc, char** argv) {
         cout << s.sequence[i] << "-> ";
     }
     cout << endl;
-    cout << "Custo: " << s.cost;
+    cout << "Custo: " << s.cost << endl;
+
+    end = clock();
+    double time = double(end - start) / double(CLOCKS_PER_SEC);
+    cout << "Tempo: " << fixed << time << setprecision(5);
+    cout << " segundos " << endl;
 
     return 0;
 }
