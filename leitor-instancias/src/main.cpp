@@ -46,7 +46,7 @@ vector<InsertionInfo> calcularCustoInsercao(Solution& s, vector<int>& CL, vector
         int i = s.sequence[a];
         int j = s.sequence[a + 1];
         for (auto k : CL) {
-            custoInsercao[l].custo = c[i-1][k-1] + c[j-1][k] - c[i-1][j-1];
+            custoInsercao[l].custo = c[i-1][k-1] + c[j-1][k-1] - c[i-1][j-1];
             custoInsercao[l].noInserido = k;
             custoInsercao[l].arestaRemovida = a;
             l++;
@@ -81,10 +81,6 @@ Solution Construcao(int n_vertices, vector<vector<int>>& c){
     while(!CL.empty()) {
         vector<InsertionInfo> custoInsercao = calcularCustoInsercao(s, CL, c);
         ordenarEmOrdemCrescente(custoInsercao);
-
-        for (int i = 0; i < custoInsercao.size(); i++) {
-    }
-
         double alpha = (double) rand() / RAND_MAX;
         int selecionado = rand() % ((int) ceil(alpha * custoInsercao.size()));
         inserirNaSolucao(s, custoInsercao[selecionado].noInserido, custoInsercao[selecionado].arestaRemovida);
@@ -149,12 +145,10 @@ bool bestImprovement2Opt(Solution *s, vector<vector<int>>& c){
     for (int i=1; i < s->sequence.size() - 2; i++){
         int vi = s->sequence[i]-1;
         int vi_prev = s->sequence[i-1]-1;
-        int vi_next = s->sequence[i+1]-1;
 
-        for (int j= i+2; j < s->sequence.size() - 2; j++){
+        for (int j= i + 2; j < s->sequence.size(); j++){
             int vj = s->sequence[j] - 1;
             int vj_prev = s->sequence[j-1] - 1;
-            int vj_next = s->sequence[j+1] - 1;
 
             double delta = -c[vi_prev][vi] -c[vj_prev][vj] + c[vi_prev][vj_prev] + c[vi][vj];
 
@@ -178,7 +172,7 @@ bool bestImprovement2Opt(Solution *s, vector<vector<int>>& c){
 bool bestImprovementOrOpt(Solution *s, int k, vector<vector<int>>& c){
     double bestDelta=0;
     int best_i, best_j;
-    for (int i=1; i < s->sequence.size() - k; i++){
+    for (int i=1; i < s->sequence.size() - k - 1; i++){
         int vi = s->sequence[i] - 1;
         int vi_next = s->sequence[i + 1] - 1;
         int vi_prev = s->sequence[i - 1] - 1;
@@ -239,6 +233,7 @@ void BuscaLocal(Solution *s,  vector<vector<int>>& c){
 
 Solution Perturbacao(Solution& best, vector<vector<int>>& c){
     Solution s = best;
+    s.cost = 0;
     int maxSize = ceil(static_cast<double>(s.sequence.size()) / 10);
     int size1 = 2 + rand() % (maxSize - 2 + 1); // escolhe um valor entre 2 e |V| / 10
     int start1 = 1 + rand() % (s.sequence.size() - size1 - 1); // onde o primeiro segmento começa
@@ -256,13 +251,13 @@ Solution Perturbacao(Solution& best, vector<vector<int>>& c){
 
     // realiza a troca dos segmentos
     if (start1 < start2) {
-        rotate(begin, s.sequence.begin() + start2, s.sequence.begin() + end2 + 1);
-        rotate(begin + size2, begin + size2 + size1, s.sequence.begin() + end2 + 1);
+        rotate(begin, s.sequence.begin() + start2, end);
+        rotate(begin + size2, begin + size2 + size1, end);
     } else {
-        rotate(begin, s.sequence.begin() + start1, s.sequence.begin() + end1 + 1);
-        rotate(begin + size1, begin + size1 + size2, s.sequence.begin() + end1 + 1);
+        rotate(begin, s.sequence.begin() + start1, end);
+        rotate(begin + size1, begin + size1 + size2, end);
     }
-
+    
     for (int i = 0; i < s.sequence.size() - 1; i++){
         int n1 = s.sequence[i] - 1;
         int n2 = s.sequence[i+1] - 1;
