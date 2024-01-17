@@ -1,0 +1,271 @@
+a280.tsp
+Custo: 2579
+Tempo: 34.7017 segundos
+
+ali535.tsp
+Custo: 202391
+Tempo: 558.322 segundos
+
+att48.tsp
+Custo: 10628
+Tempo: 0.1411 segundos
+
+att532.tsp
+Custo: 27733.2
+Tempo: 558.309 segundos
+
+bayg29.tsp
+Custo: 1610
+Tempo: 0.0229 segundos
+
+bays29.tsp
+Custo: 2020
+Tempo: 0.0264 segundos
+
+berlin52.tsp
+Custo: 7542
+Tempo: 0.1589 segundos
+
+bier127.tsp
+Custo: 118282
+Tempo: 4.1328 segundos
+
+brazil58.tsp
+Custo: 25395
+Tempo: 0.2061 segundos
+
+brg180.tsp
+Custo: 1950
+Tempo: 4.1346 segundos
+
+burma14.tsp
+Custo: 3323
+Tempo: 0.0026 segundos
+
+ch130.tsp
+Custo: 6110
+Tempo: 4.111 segundos
+
+ch150.tsp
+Custo: 6528
+Tempo: 4.0108 segundos
+
+d198.tsp
+Custo: 15780
+Tempo: 11.3328 segundos
+
+d493.tsp
+Custo: 35041.2
+Tempo: 396.129 segundos
+
+dantzig42.tsp
+Custo: 699
+Tempo: 0.0715 segundos
+
+eil101.tsp
+Custo: 629
+Tempo: 1.7382 segundos
+
+eil51.tsp
+Custo: 426
+Tempo: 0.1735 segundos
+
+eil76.tsp
+Custo: 538
+Tempo: 0.6596 segundos
+
+fl417.tsp
+Custo: 11861
+Tempo: 147.176 segundos
+
+fri26.tsp
+Custo: 937
+Tempo: 0.0164 segundos
+
+gil262.tsp
+Custo: 2378.7
+Tempo: 30.091 segundos
+
+gr120.tsp
+Custo: 6942
+Tempo: 3.5585 segundos
+
+gr137.tsp
+Custo: 69853
+Tempo: 4.4884 segundos
+
+gr17.tsp
+Custo: 2085
+Tempo: 0.0049 segundos
+
+gr202.tsp
+Custo: 40160.3
+Tempo: 13.7534 segundos
+
+gr21.tsp
+Custo: 2707
+Tempo: 0.0075 segundos
+
+gr229.tsp
+Custo: 134612.6
+Tempo: 21.7563 segundos
+
+gr24.tsp
+Custo: 1272
+Tempo: 0.0128 segundos
+
+gr431.tsp
+Custo: 171538
+Tempo: 275.676 segundos
+
+gr48.tsp
+Custo: 5046
+Tempo: 0.1358 segundos
+
+gr96.tsp
+Custo: 55209
+Tempo: 1.3156 segundos
+
+hk48.tsp
+Custo: 11461
+Tempo: 0.1484 segundos
+
+kroA100.tsp
+Custo: 21282
+Tempo: 1.3609 segundos
+
+kroA150.tsp
+Custo: 26524
+Tempo: 4.1354 segundos
+
+kroA200.tsp
+Custo: 29368
+Tempo: 12.361 segundos
+
+kroB100.tsp
+Custo: 22141
+Tempo: 1.5502 segundos
+
+kroB150.tsp
+Custo: 26130
+Tempo: 4.4264 segundos
+
+kroB200.tsp
+Custo: 29437.3
+Tempo: 12.4138 segundos
+
+kroC100.tsp
+Custo: 20749
+Tempo: 1.486 segundos
+
+kroD100.tsp
+Custo: 21294
+Tempo: 1.545 segundos
+
+kroE100.tsp
+Custo: 22068
+Tempo: 1.6462 segundos
+
+lin105.tsp
+Custo: 14379
+Tempo: 1.6649 segundos
+
+lin318.tsp
+Custo: 42045.9
+Tempo: 66.6661 segundos
+
+linhp318.tsp
+Custo: 42051.3
+Tempo: 66.3137 segundos
+
+pcb442.tsp
+Custo: 50845.3
+Tempo: 225.611 segundos
+
+pr107.tsp
+Custo: 44303
+Tempo: 1.7119 segundos
+
+pr124.tsp
+Custo: 59030
+Tempo: 2.6707 segundos
+
+pr136.tsp
+Custo: 96772
+Tempo: 5.0986 segundos
+
+pr144.tsp
+Custo: 58537
+Tempo: 4.0312 segundos
+
+pr152.tsp
+Custo: 73682
+Tempo: 3.4662 segundos
+
+pr226.tsp
+Custo: 80369
+Tempo: 13.9502 segundos
+
+pr264.tsp
+Custo: 49135
+Tempo: 22.6781 segundos
+
+pr299.tsp
+Custo: 48194.3
+Tempo: 46.27 segundos
+
+pr76.tsp
+Custo: 108159
+Tempo: 0.582 segundos
+
+rat195.tsp
+Custo: 2323.7
+Tempo: 10.6959 segundos
+
+rat99.tsp
+Custo: 1211
+Tempo: 1.6105 segundos
+
+rd100.tsp
+Custo: 7910
+Tempo: 1.5469 segundos
+
+rd400.tsp
+Custo: 15299.4
+Tempo: 177.796 segundos
+
+si175.tsp
+Custo: 21407
+Tempo: 5.7829 segundos
+
+si535.tsp
+Custo: 48464.6
+Tempo: 258.332 segundos
+
+st70.tsp
+Custo: 675
+Tempo: 0.4404 segundos
+
+swiss42.tsp
+Custo: 1273
+Tempo: 0.0737 segundos
+
+ts225.tsp
+Custo: 126643
+Tempo: 11.2335 segundos
+
+tsp225.tsp
+Custo: 3916
+Tempo: 19.0501 segundos
+
+u159.tsp
+Custo: 42080
+Tempo: 4.4074 segundos
+
+ulysses16.tsp
+Custo: 6859
+Tempo: 0.0042 segundos
+
+ulysses22.tsp
+Custo: 7013
+Tempo: 0.0105 segundos

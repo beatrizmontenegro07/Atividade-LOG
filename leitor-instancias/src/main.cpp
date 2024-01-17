@@ -18,7 +18,7 @@ vector<int> escolher3NosAleatorios(int n_vertices){
     vector <int> nos = {1, 1};
     int c=1;
     while (c <= 3){
-        int no = rand() % n_vertices + 1; // escolhe um no aleatoriamente
+        int no = 1 + rand() % n_vertices; // escolhe um no aleatoriamente
         if (find(nos.begin(), nos.end(), no) == nos.end()){ // verifica se o no ja foi adicionado
             nos.insert(nos.begin() + c, no); // caso não tenha sido, o no é adicionado
             c++;
@@ -81,7 +81,7 @@ Solution Construcao(int n_vertices, vector<vector<int>>& c){
     while(!CL.empty()) {
         vector<InsertionInfo> custoInsercao = calcularCustoInsercao(s, CL, c);
         ordenarEmOrdemCrescente(custoInsercao);
-        double alpha = (double) rand() / RAND_MAX;
+        double alpha = (double) (rand() / RAND_MAX) + 0.0000001;
         int selecionado = rand() % ((int) ceil(alpha * custoInsercao.size()));
         inserirNaSolucao(s, custoInsercao[selecionado].noInserido, custoInsercao[selecionado].arestaRemovida);
         CL.erase(remove(CL.begin(), CL.end(), custoInsercao[selecionado].noInserido), CL.end());
@@ -113,8 +113,7 @@ bool bestImprovementSwap(Solution *s, vector<vector<int>>& c) {
             double delta;
 
             if (j == i+1){
-                delta = -c[vi_prev][vi] - c[vi][vi_next] + c[vi_prev][vj] + c[vj][vi_next] + c[vj_prev][vj] - c[vj][vj_next]
-                            + c[vj_prev][vi] + c[vi][vj_next];
+                delta = -c[vi_prev][vi] + c[vi_prev][vj] - c[vj][vj_next] + c[vi][vj_next];
             } else{
                 delta = -c[vi_prev][vi] - c[vi][vi_next] + c[vi_prev][vj] + c[vj][vi_next] - c[vj_prev][vj] - c[vj][vj_next]
                             + c[vj_prev][vi] + c[vi][vj_next];
@@ -292,46 +291,39 @@ Solution ILS(int maxIter, int maxIterIls,int n, vector<vector<int>>& c){
 }
 
 int main(int argc, char** argv) {
-    clock_t start, end;
-    start = clock();
     srand(time(NULL));
+    double custoFinal=0, tempoFinal=0;
+    for (int l=0; l < 10; l++){
+        clock_t start, end;
+        start = clock();
 
-    auto data = Data(argc, argv[1]);
-    data.read();
-    size_t n = data.getDimension();
+        auto data = Data(argc, argv[1]);
+        data.read();
+        size_t n = data.getDimension();
 
-    cout << "Dimension: " << n << endl;
-    cout << "DistanceMatrix: " << endl;
-    data.printMatrixDist();
-
-    vector<vector<int>> c(n, vector<int>(n, 0));
-    for (int i=0; i < n; i++){
-        for(int j=0; j < n; j++){
-            c[i][j] = data.getDistance(i+1, j+1);
+        vector<vector<int>> c(n, vector<int>(n, 0));
+        for (int i=0; i < n; i++){
+            for(int j=0; j < n; j++){
+                c[i][j] = data.getDistance(i+1, j+1);
+            }
         }
+
+        int maxInter = 50, maxInterILS;
+
+        if (n >= 150)
+            maxInterILS = n / 2;
+        else
+            maxInterILS = n;
+
+        Solution s = ILS(maxInter, maxInterILS, n, c);
+        end = clock();
+        double time = double(end - start) / double(CLOCKS_PER_SEC);
+        custoFinal += s.cost;
+        tempoFinal += time;
     }
-
-    int maxInter = 50, maxInterILS;
-
-    if (n >= 150)
-        maxInterILS = n / 2;
-    else
-        maxInterILS = n;
-
-    Solution s = ILS(maxInter, maxInterILS, n, c);
-
-    cout << "Solucao final: " << endl;
-
-    for (int i=0; i < s.sequence.size(); i++){
-        cout << s.sequence[i] << "-> ";
-    }
-    cout << endl;
-    cout << "Custo: " << s.cost << endl;
-
-    end = clock();
-    double time = double(end - start) / double(CLOCKS_PER_SEC);
-    cout << "Tempo: " << fixed << time << setprecision(5);
-    cout << " segundos " << endl;
+    
+    std :: cout << "Custo: " << custoFinal/10 << endl;
+    std :: cout << "Tempo: " << tempoFinal/10 << " segundos" << endl;
 
     return 0;
 }
